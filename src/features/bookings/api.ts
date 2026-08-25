@@ -55,4 +55,10 @@ export const bookingsApi = {
     const response = await fetch(`/api/arenas/${arenaId}/availability?date=${date}`, { cache: 'no-store' });
     return parseOrThrow(response);
   },
+
+  async listManaged(params: { arenaId: string; startDate: string; endDate: string }): Promise<Booking[]> {
+    const query = new URLSearchParams(params);
+    const response = await fetch(`/api/manager/bookings?${query.toString()}`, { cache: 'no-store' });
+    return parseOrThrow(response);
+  },
 };

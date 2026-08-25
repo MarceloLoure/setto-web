@@ -18,10 +18,19 @@ export interface Booking {
   startTime: string;
   endTime: string;
   totalAmount: string;
-  court: { id: string; name: string; sport: string };
+  court: { id: string; name: string; sport: string; hourlyRate?: string; isCovered?: boolean };
   arena: { id: string; name: string };
   // Reservas de balcão (sem userId) não têm usuário vinculado — sempre checar antes de usar.
-  user: { id: string; name: string; email: string; phone?: string | null } | null;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string | null;
+    avatar?: { path: string } | null;
+  } | null;
+  clientDisplayName?: string | null;
+  clientPhone?: string | null;
+  clientEmail?: string | null;
 }
 
 export interface CreateAppBookingPayload {
