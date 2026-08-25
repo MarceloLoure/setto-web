@@ -1,0 +1,10 @@
+{
+  "/api/auth/me/route": "app/api/auth/me/route.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/arenas/[arenaId]/dashboard/route": "app/api/arenas/[arenaId]/dashboard/route.js",
+  "/api/payments/arena/[arenaId]/route": "app/api/payments/arena/[arenaId]/route.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(dashboard)/arenas/[arenaId]/dashboard/page": "app/(dashboard)/arenas/[arenaId]/dashboard/page.js",
+  "/(dashboard)/arenas/[arenaId]/payments/page": "app/(dashboard)/arenas/[arenaId]/payments/page.js"
+}
