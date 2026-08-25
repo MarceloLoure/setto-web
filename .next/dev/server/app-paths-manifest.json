@@ -1,9 +1,9 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/api/manager/bookings/route": "app/api/manager/bookings/route.js",
   "/api/courts/arena/[arenaId]/route": "app/api/courts/arena/[arenaId]/route.js",
-  "/(dashboard)/arenas/[arenaId]/bookings/page": "app/(dashboard)/arenas/[arenaId]/bookings/page.js",
-  "/(dashboard)/arenas/[arenaId]/payments/page": "app/(dashboard)/arenas/[arenaId]/payments/page.js",
+  "/api/courts/[courtId]/route": "app/api/courts/[courtId]/route.js",
+  "/page": "app/page.js",
+  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(dashboard)/arenas/[arenaId]/courts/page": "app/(dashboard)/arenas/[arenaId]/courts/page.js",
   "/(dashboard)/arenas/[arenaId]/dashboard/page": "app/(dashboard)/arenas/[arenaId]/dashboard/page.js"
 }

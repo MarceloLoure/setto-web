@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, Stack, Avatar, Menu, MenuItem, Chip } from '@mui/material';
 import SportsTennisIcon from '@mui/icons-material/SportsTennis';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Link from 'next/link';
 import { useAuth } from '@/features/auth/AuthContext';
 
@@ -46,6 +47,9 @@ export default function Header() {
                   <Typography variant="body2" fontWeight={600}>{user?.name}</Typography>
                   <Typography variant="caption" color="text.secondary">{user?.email}</Typography>
                 </Stack>
+              </MenuItem>
+              <MenuItem component={Link} href="/profile" onClick={() => setAnchorEl(null)}>
+                <PersonOutlineIcon fontSize="small" sx={{ mr: 1 }} /> Editar perfil
               </MenuItem>
               <MenuItem onClick={() => logout()}>
                 <LogoutIcon fontSize="small" sx={{ mr: 1 }} /> Sair

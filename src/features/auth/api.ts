@@ -42,4 +42,9 @@ export const authApi = {
     const data = await response.json();
     return data.user ?? null;
   },
+
+  async updateProfile(payload: FormData): Promise<CurrentUser> {
+    const response = await fetch('/api/auth/me', { method: 'PATCH', body: payload });
+    return parseOrThrow(response);
+  },
 };

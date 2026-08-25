@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { courtsApi } from '@/features/courts/api';
@@ -37,12 +38,18 @@ export default function ArenaCourtsPage() {
   const [courts, setCourts] = useState<Court[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingCourt, setEditingCourt] = useState<Court | null>(null);
 
   const loadCourts = async () => {
     setIsLoading(true);
     try {
-      const data = await courtsApi.listByArena(arenaId);
-      setCourts(data);
+      const listedCourts = await courtsApi.listByArena(arenaId);
+      // A listagem pode retornar apenas o resumo da quadra. O detalhe contém
+      // as fotos necessárias para os cards e para a edição.
+      const courtsWithDetails = await Promise.all(
+        listedCourts.map((court) => courtsApi.getById(court.id).catch(() => court)),
+      );
+      setCourts(courtsWithDetails);
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +93,7 @@ export default function ArenaCourtsPage() {
         <Typography variant="h5" fontWeight={700}>
           Quadras
         </Typography>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => setDialogOpen(true)}>
+        <Button variant="contained" startIcon={<AddIcon />} onClick={() => { setEditingCourt(null); setDialogOpen(true); }}>
           Nova quadra
         </Button>
       </Stack>
@@ -102,14 +109,18 @@ export default function ArenaCourtsPage() {
           {courts.map((court) => (
             <Grid key={court.id} size={{ xs: 12, sm: 6, md: 4 }}>
               <Card variant="outlined">
+                {court.photos?.[0] && (
+                  <Box component="img" src={court.photos[0].path} alt={court.name} sx={{ width: '100%', height: 150, display: 'block', objectFit: 'cover' }} />
+                )}
                 <CardContent>
                   <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
                     <Typography variant="subtitle1" fontWeight={600}>
                       {court.name}
                     </Typography>
-                    <IconButton size="small" onClick={() => handleDelete(court.id)}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
+                    <Stack direction="row" spacing={0.5}>
+                      <IconButton size="small" aria-label="Editar quadra" onClick={() => { setEditingCourt(court); setDialogOpen(true); }}><EditIcon fontSize="small" /></IconButton>
+                      <IconButton size="small" aria-label="Remover quadra" onClick={() => handleDelete(court.id)}><DeleteIcon fontSize="small" /></IconButton>
+                    </Stack>
                   </Stack>
                   <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: 'wrap' }}>
                     <Chip label={SPORTS[court.sport] ?? court.sport} size="small" />
@@ -129,7 +140,8 @@ export default function ArenaCourtsPage() {
       <CourtFormDialog
         open={dialogOpen}
         arenaId={arenaId}
-        onClose={() => setDialogOpen(false)}
+        court={editingCourt}
+        onClose={() => { setDialogOpen(false); setEditingCourt(null); }}
         onSaved={() => loadCourts()}
       />
     </Box>

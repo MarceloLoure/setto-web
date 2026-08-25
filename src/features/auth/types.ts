@@ -40,3 +40,11 @@ export interface RegisterData {
   password: string;
   phone?: string;
 }
+
+export interface UpdateProfilePayload {
+  name?: string;
+  phone?: string;
+  city?: string;
+  state?: string;
+  bio?: string;
+}

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { apiFetch } from '@/lib/http';
+import { proxyToApi } from '@/lib/proxy';
 import { clearAuthCookie } from '@/lib/cookies';
 import type { CurrentUser } from '@/features/auth/types';
 
@@ -19,4 +20,8 @@ export async function GET() {
   }
 
   return NextResponse.json({ user: data });
+}
+
+export async function PATCH(request: Request) {
+  return proxyToApi(request, '/users/me');
 }
