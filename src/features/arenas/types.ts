@@ -88,11 +88,48 @@ export interface CourtDashboardSummary {
   bookingsCount: number;
 }
 
+export interface LiveMatch {
+  bookingId: string;
+  courtId: string;
+  client: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface LiveOccupancy {
+  totalCourts: number;
+  courtsInUseCount: number;
+  courtsFreeCount: number;
+  currentMatches: LiveMatch[];
+}
+
+export interface UpcomingBooking {
+  id: string;
+  courtName: string;
+  clientName: string;
+  startTime: string;
+  endTime: string;
+  totalAmount: string | number;
+  status: 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | 'PENDING' | 'RESERVED_LOCAL' | 'NO_SHOW';
+}
+
+export interface DashboardKpis {
+  dailyAverageRevenue: number;
+  averageTicket: number;
+  cancellationRate: number;
+  operationalDays: number;
+  totalBookedValue: number;
+  pendingRevenueToReceive: number;
+}
+
 export interface ArenaDashboardSummary {
   arena: { id: string; name: string };
   period: DashboardPeriod;
   rangeStart: string;
   rangeEnd: string;
+  live: LiveOccupancy;
+  upcomingToday: UpcomingBooking[];
+  kpis: DashboardKpis;
   bookings: { total: number; confirmed: number; cancelled: number; completed: number };
   revenue: {
     total: number;

@@ -7,6 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Link from 'next/link';
 import { useAuth } from '@/features/auth/AuthContext';
+import ArenaSwitcher from './ArenaSwitcher';
 
 export default function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -33,6 +34,7 @@ export default function Header() {
           </Stack>
         ) : (
           <Stack direction="row" spacing={2} alignItems="center">
+            <ArenaSwitcher />
             <Chip label={user?.role} size="small" color="primary" variant="outlined" />
             <Avatar
               src={user?.avatar?.path}

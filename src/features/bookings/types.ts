@@ -5,7 +5,7 @@ export type BookingType =
   | 'RECURRING_LESSON'
   | 'TOURNAMENT';
 
-export type BookingStatus = 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
+export type BookingStatus = 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | 'PENDING' | 'RESERVED_LOCAL' | 'NO_SHOW';
 
 export interface Booking {
   id: string;

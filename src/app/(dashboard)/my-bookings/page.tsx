@@ -5,10 +5,13 @@ import { Box, Typography, List, ListItem, ListItemText, Chip, Stack, Button, Cir
 import { bookingsApi } from '@/features/bookings/api';
 import type { Booking } from '@/features/bookings/types';
 
-const STATUS_COLOR: Record<Booking['status'], 'success' | 'error' | 'default'> = {
+const STATUS_COLOR: Record<Booking['status'], 'success' | 'error' | 'default' | 'warning' | 'info'> = {
   CONFIRMED: 'success',
   CANCELLED: 'error',
   COMPLETED: 'default',
+  PENDING: 'warning',
+  RESERVED_LOCAL: 'info',
+  NO_SHOW: 'error',
 };
 
 export default function MyBookingsPage() {
@@ -18,8 +21,6 @@ export default function MyBookingsPage() {
   const load = async () => {
     setIsLoading(true);
     try {
-      // GET /bookings já filtra automaticamente pelas reservas do usuário logado
-      // quando o papel é ATHLETE (não precisa mandar userId).
       const data = await bookingsApi.list();
       setBookings(data);
     } finally {
