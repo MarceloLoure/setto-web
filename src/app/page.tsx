@@ -280,7 +280,7 @@ export default function RootPage() {
           </Typography>
         ) : (
           <Grid container spacing={3}>
-            {data.plans.map((plan, index) => {
+            {data.plans.map((plan:any, index:number) => {
               const isHighlighted = index === Math.floor((data.plans.length - 1) / 2) && data.plans.length > 1;
               return (
                 <Grid size={{ xs: 12, sm: 6, md: 4 }} key={plan.id}>
