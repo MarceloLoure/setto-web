@@ -1,4 +1,4 @@
-// File: F:\beach-social-club-web-v2.5\bsc-web-v2\src\app\api\auth\me\route.ts
+// File: F:\setto-web\src\app\api\auth\me\route.ts
 import * as entry from '../../../../../../../src/app/api/auth/me/route.js'
 import type { NextRequest } from 'next/server.js'
 

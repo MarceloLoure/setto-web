@@ -1,4 +1,4 @@
-// File: F:\beach-social-club-web-v2.5\bsc-web-v2\src\app\layout.tsx
+// File: F:\setto-web\src\app\layout.tsx
 import * as entry from '../../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
