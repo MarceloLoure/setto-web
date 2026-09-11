@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import Link from 'next/link';
 import { publicApi } from '../api';
 import type { PublicPlan, CheckoutArenaResult } from '../types';
 
@@ -42,7 +43,11 @@ function currencyBR(value: number) {
 export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
   const [billingType, setBillingType] = useState<'PIX' | 'CREDIT_CARD'>('PIX');
   const [arenaName, setArenaName] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [cpf, setCpf] = useState('');
   const [cpfCnpj, setCpfCnpj] = useState('');
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
@@ -70,12 +75,26 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
+
+    if (password !== confirmPassword) {
+      setError('As senhas não coincidem.');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('A senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const data = await publicApi.checkoutArena({
         platformPlanId: plan.id,
         arenaName,
+        name,
         email,
+        password,
+        cpf,
         cpfCnpj,
         phone: phone || undefined,
         city: city || undefined,
@@ -116,11 +135,13 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
       <DialogContent dividers>
         {result ? (
           <Stack spacing={2} alignItems="center" sx={{ py: 1 }}>
+            <Alert severity="success" sx={{ width: '100%' }}>
+              Sua conta foi criada e você já está logado! Assim que o pagamento for confirmado, sua arena é ativada automaticamente.
+            </Alert>
             {result.billingType === 'PIX' && result.pix ? (
               <>
                 <Typography variant="body2" color="text.secondary" textAlign="center">
-                  Escaneie o QR Code no app do seu banco ou copie o código Pix abaixo. Assim que o pagamento
-                  for confirmado, você recebe por e-mail o acesso ao painel da sua arena.
+                  Escaneie o QR Code no app do seu banco ou copie o código Pix abaixo para confirmar o pagamento da assinatura.
                 </Typography>
                 <Box
                   component="img"
@@ -141,8 +162,8 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
               <Stack spacing={2} alignItems="center" textAlign="center">
                 <Typography variant="body2" color="text.secondary">
                   {result.status === 'CONFIRMED' || result.status === 'RECEIVED'
-                    ? 'Pagamento confirmado! Você vai receber por e-mail o acesso ao painel da sua arena.'
-                    : 'Cobrança gerada. Assim que o pagamento for confirmado, você recebe por e-mail o acesso ao painel da sua arena.'}
+                    ? 'Pagamento confirmado! Sua arena já está ativa.'
+                    : 'Cobrança gerada. Finalize o pagamento pelo link abaixo para ativar sua arena.'}
                 </Typography>
                 {result.invoiceUrl && (
                   <Button variant="outlined" href={result.invoiceUrl} target="_blank" rel="noopener">
@@ -151,6 +172,9 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
                 )}
               </Stack>
             )}
+            <Button component={Link} href="/dashboard" variant="contained" fullWidth>
+              Ir para o painel
+            </Button>
           </Stack>
         ) : (
           <Box component="form" id="checkout-form" onSubmit={handleSubmit} sx={{ pt: 1 }}>
@@ -161,10 +185,60 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
 
               {error && <Alert severity="error">{error}</Alert>}
 
-              <TextField label="Nome da arena" value={arenaName} onChange={(e) => setArenaName(e.target.value)} required fullWidth />
-              <TextField label="E-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth />
+              <Divider textAlign="left">
+                <Typography variant="caption" color="text.secondary">Dados da Arena</Typography>
+              </Divider>
+
               <TextField
-                label="CPF ou CNPJ"
+                label="Nome da arena"
+                value={arenaName}
+                onChange={(e) => setArenaName(e.target.value)}
+                required
+                fullWidth
+              />
+
+              <Divider textAlign="left">
+                <Typography variant="caption" color="text.secondary">Sua conta de acesso ao painel</Typography>
+              </Divider>
+
+              <TextField label="Seu nome" value={name} onChange={(e) => setName(e.target.value)} required fullWidth />
+
+              <TextField
+                label="CPF"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+                required
+                fullWidth
+                helperText="Apenas números"
+              />
+              <TextField label="E-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth />
+              
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="Senha"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    fullWidth
+                    helperText="Mínimo 6 caracteres"
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="Confirmar senha"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+
+              <TextField
+                label="CNPJ da arena"
                 value={cpfCnpj}
                 onChange={(e) => setCpfCnpj(e.target.value)}
                 required

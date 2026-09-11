@@ -36,13 +36,18 @@ export interface CreditCardHolderInfoPayload {
 export interface CheckoutArenaPayload {
   platformPlanId: string;
   arenaName: string;
+  name: string;
   email: string;
+  password: string;
+  cpf: string;
   cpfCnpj: string;
   phone?: string;
   city?: string;
   state?: string;
   zipCode?: string;
   billingType: 'PIX' | 'CREDIT_CARD';
+  cardId?: string;
+  creditCardToken?: string;
   creditCard?: CreditCardPayload;
   creditCardHolderInfo?: CreditCardHolderInfoPayload;
 }
@@ -51,6 +56,19 @@ export interface CheckoutArenaResult {
   subscriptionId: string;
   asaasSubscriptionId: string;
   billingType: 'PIX' | 'CREDIT_CARD';
+  accessToken: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    avatar?: any;
+    isManager: boolean;
+  };
+  arena: {
+    id: string;
+    name: string;
+  };
   pix?: {
     encodedImage: string;
     payload: string;
