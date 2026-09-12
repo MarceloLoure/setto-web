@@ -92,7 +92,7 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
       const data = await publicApi.checkoutArena({
         platformPlanId: plan.id,
         arenaName,
-        arenaEmail: arenaEmail || undefined,
+        arenaEmail: arenaEmail,
         name,
         email,
         password,
