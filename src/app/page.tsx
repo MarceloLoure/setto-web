@@ -21,6 +21,7 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { publicApi } from '@/features/public/api';
 import CheckoutDialog from '@/features/public/components/CheckoutDialog';
+import Image from 'next/image';
 
 const FEATURES = [
   {
@@ -95,8 +96,6 @@ export default function RootPage() {
     })();
   }, []);
 
-  console.log(data)
-
   if (isLoading || isAuthenticated) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -110,9 +109,16 @@ export default function RootPage() {
       {/* Nav */}
       <Container maxWidth="lg">
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ py: 2.5 }}>
-          <Typography variant="h6" fontWeight={800} letterSpacing="-0.02em">
-            Setto
-          </Typography>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex' }}>
+            <Image
+              src="/header.png"
+              alt="Setto Arenas"
+              width={100}
+              height={50}
+              priority
+              style={{ objectFit: 'contain' }}
+            />
+          </Link>
           <Stack direction="row" spacing={1.5} alignItems="center">
             <Button component={Link} href="/login" color="inherit">
               Entrar
@@ -124,8 +130,31 @@ export default function RootPage() {
         </Stack>
       </Container>
 
-      {/* Hero */}
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
+      {/* Banner Principal - Full Width (Solto fora do Container) */}
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: '1200px',
+          maxHeight: 450,
+          height: { xs: 250, md: 450 },
+          my: { xs: 2, md: 4 },
+          overflow: 'hidden',
+          borderRadius: 3,
+          mx: 'auto',
+        }}
+      >
+        <Image
+          src="/banner_principal.png"
+          alt="Banner Setto Arenas"
+          width={1200}
+          height={450}
+          priority
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+        />
+      </Box>
+
+      {/* Hero Content */}
+      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
         <Grid container spacing={6} alignItems="center">
           <Grid size={{ xs: 12, md: 7 }}>
             <Typography
@@ -280,7 +309,7 @@ export default function RootPage() {
           </Typography>
         ) : (
           <Grid container spacing={3}>
-            {data.plans.map((plan:any, index:number) => {
+            {data.plans.map((plan: any, index: number) => {
               const isHighlighted = index === Math.floor((data.plans.length - 1) / 2) && data.plans.length > 1;
               return (
                 <Grid size={{ xs: 12, sm: 6, md: 4 }} key={plan.id}>

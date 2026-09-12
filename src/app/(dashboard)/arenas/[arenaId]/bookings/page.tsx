@@ -118,15 +118,20 @@ export default function ArenaBookingsPage() {
 
   const calendarEvents = useMemo(() => {
     const courtBookings = bookings.filter((booking) => booking.courtId === activeCourtId && booking.status !== 'CANCELLED');
-    const bookedEvents = courtBookings.map((booking) => ({
-      id: booking.id,
-      start: booking.startTime,
-      end: booking.endTime,
-      title: clientName(booking),
-      backgroundColor: '#e64b5d',
-      borderColor: '#ff8a98',
-      extendedProps: { booking },
-    }));
+    const bookedEvents = courtBookings.map((booking) => {
+      const isPaid = booking.isPaid || booking.payment?.status === 'CONFIRMED' || booking.payment?.status === 'RECEIVED';
+
+      return {
+        id: booking.id,
+        start: booking.startTime,
+        end: booking.endTime,
+        title: clientName(booking),
+        // Verde para pago, Tom avermelhado/alaranjado para pendente
+        backgroundColor: isPaid ? 'rgba(16, 185, 129, 0.25)' : 'rgba(230, 75, 93, 0.25)',
+        borderColor: isPaid ? '#10B981' : '#E64B5D',
+        extendedProps: { booking, isPaid },
+      };
+    });
 
     if (!range || !activeCourt) return bookedEvents;
 
@@ -193,6 +198,7 @@ export default function ArenaBookingsPage() {
         userId: paymentBooking.userId ?? undefined,
       });
       setPaymentBooking(null);
+      await load(); // 👈 Recarrega os agendamentos para refletir o status de Pago
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao registrar pagamento.');
     } finally {
@@ -319,23 +325,60 @@ export default function ArenaBookingsPage() {
             }}
             eventContent={(arg: EventContentArg) => {
               if (arg.event.extendedProps.isFree) {
-                return (
-                  <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', px: 1, color: '#a7f3d0' }}>
-                    <Typography component="div" sx={{ fontSize: '0.72rem', fontWeight: 700, lineHeight: 1.15 }}></Typography>
-                    <Typography component="div" sx={{ fontSize: '0.66rem', lineHeight: 1.2, opacity: 0.85 }}></Typography>
-                  </Box>
-                );
+                return null;
               }
+              
               const booking = arg.event.extendedProps.booking as Booking;
+              const isPaid = arg.event.extendedProps.isPaid;
               const name = clientName(booking);
               const phone = booking.clientPhone || booking.user?.phone;
+
               return (
-                <Stack direction="row" spacing={0.75} alignItems="center" sx={{ height: '100%', p: 0.75, overflow: 'hidden' }}>
-                  <Avatar src={booking.user?.avatar?.path} sx={{ width: 28, height: 28, fontSize: '0.72rem', bgcolor: 'rgba(255,255,255,0.22)' }}>{name.charAt(0).toUpperCase()}</Avatar>
-                  <Box sx={{ minWidth: 0 }}>
-                    <Typography component="div" sx={{ fontSize: '0.73rem', lineHeight: 1.2, fontWeight: 800 }} noWrap>{name}</Typography>
-                    <Typography component="div" sx={{ fontSize: '0.64rem', lineHeight: 1.25, opacity: 0.92 }} noWrap>{phone || 'Sem telefone'}</Typography>
-                    <Typography component="div" sx={{ fontSize: '0.67rem', lineHeight: 1.2, fontWeight: 700 }} noWrap>{currencyBR(booking.totalAmount)}</Typography>
+                <Stack
+                  direction="row"
+                  spacing={0.75}
+                  alignItems="center"
+                  sx={{
+                    height: '100%',
+                    p: 0.75,
+                    overflow: 'hidden',
+                    borderLeft: '4px solid',
+                    borderLeftColor: isPaid ? '#10B981' : '#FF4D6D',
+                  }}
+                >
+                  <Avatar
+                    src={booking.user?.avatar?.path}
+                    sx={{ width: 28, height: 28, fontSize: '0.72rem', bgcolor: 'rgba(255,255,255,0.22)' }}
+                  >
+                    {name.charAt(0).toUpperCase()}
+                  </Avatar>
+                  <Box sx={{ minWidth: 0, flexGrow: 1 }}>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={0.5}>
+                      <Typography component="div" sx={{ fontSize: '0.73rem', lineHeight: 1.2, fontWeight: 800 }} noWrap>
+                        {name}
+                      </Typography>
+                      <Box
+                        sx={{
+                          px: 0.6,
+                          py: 0.1,
+                          borderRadius: '4px',
+                          fontSize: '0.58rem',
+                          fontWeight: 800,
+                          bgcolor: isPaid ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 77, 109, 0.2)',
+                          color: isPaid ? '#10B981' : '#FF4D6D',
+                          textTransform: 'uppercase',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {isPaid ? 'Pago' : 'Pendente'}
+                      </Box>
+                    </Stack>
+                    <Typography component="div" sx={{ fontSize: '0.64rem', lineHeight: 1.25, opacity: 0.85 }} noWrap>
+                      {phone || 'Sem telefone'}
+                    </Typography>
+                    <Typography component="div" sx={{ fontSize: '0.67rem', lineHeight: 1.2, fontWeight: 700 }} noWrap>
+                      {currencyBR(booking.totalAmount)}
+                    </Typography>
                   </Box>
                 </Stack>
               );

@@ -9,13 +9,13 @@ export const settoTheme = createTheme({
       paper: '#112327',
     },
     primary: {
-      main: '#00D8A7',
-      light: '#33E0B9',
-      dark: '#00B388',
+      main: '#00D5E8',
+      light: '#33E2F3',
+      dark: '#009EB0',
       contrastText: '#061012',
     },
     secondary: {
-      main: '#2DD4BF',
+      main: '#00B8D4',
       contrastText: '#061012',
     },
     error: {

@@ -19,7 +19,7 @@ export default function Header() {
         <Stack component={Link} href="/" direction="row" spacing={1} alignItems="center" sx={{ textDecoration: 'none' }}>
           <SportsTennisIcon color="primary" sx={{ fontSize: 30 }} />
           <Typography variant="h6" fontWeight={700} color="primary.main">
-            Beach Social Club
+            Setto Arenas
           </Typography>
         </Stack>
 

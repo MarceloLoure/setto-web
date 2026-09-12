@@ -18,6 +18,8 @@ export interface Booking {
   startTime: string;
   endTime: string;
   totalAmount: string;
+  isPaid?: boolean;
+  payment?: BookingPayment | null;
   court: { id: string; name: string; sport: string; hourlyRate?: string; isCovered?: boolean };
   arena: { id: string; name: string };
   // Reservas de balcão (sem userId) não têm usuário vinculado — sempre checar antes de usar.
@@ -31,6 +33,17 @@ export interface Booking {
   clientDisplayName?: string | null;
   clientPhone?: string | null;
   clientEmail?: string | null;
+}
+
+export interface BookingPayment {
+  id: string;
+  amount: string | number;
+  method: string;
+  status: string;
+  paidAt?: string | null;
+  pixCopiaECola?: string | null;
+  expiresAt?: string | null;
+  asaasPaymentId?: string | null;
 }
 
 export interface CreateAppBookingPayload {

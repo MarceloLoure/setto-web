@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography, Box, Divider } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/features/auth/AuthContext';
@@ -20,6 +22,20 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   const content = (
     <Box sx={{ py: 2 }}>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+        <Link href="/" style={{ display: 'flex' }}>
+          <Image
+            src="/header.png"
+            alt="Setto Arenas Logo"
+            width={100}
+            height={25}
+            priority
+            style={{ objectFit: 'contain' }}
+          />
+        </Link>
+      </Box>
+
       {menuGroups.map((group) => {
         const visibleItems = group.items.filter((item) => {
           if (item.roles && (!user || !item.roles.includes(user.role))) return false;
