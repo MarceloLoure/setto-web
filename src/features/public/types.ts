@@ -38,6 +38,7 @@ export interface CheckoutArenaPayload {
   arenaName: string;
   name: string;
   email: string;
+  arenaEmail: string;
   password: string;
   cpf: string;
   cpfCnpj: string;
