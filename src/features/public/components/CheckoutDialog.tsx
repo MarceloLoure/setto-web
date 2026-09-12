@@ -47,6 +47,7 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [arenaEmail, setArenaEmail] = useState('')
   const [cpf, setCpf] = useState('');
   const [cpfCnpj, setCpfCnpj] = useState('');
   const [phone, setPhone] = useState('');
@@ -91,6 +92,7 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
       const data = await publicApi.checkoutArena({
         platformPlanId: plan.id,
         arenaName,
+        arenaEmail: arenaEmail || undefined,
         name,
         email,
         password,
@@ -197,42 +199,25 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
                 fullWidth
               />
 
-              <Divider textAlign="left">
-                <Typography variant="caption" color="text.secondary">Sua conta de acesso ao painel</Typography>
-              </Divider>
-
-              <TextField label="Seu nome" value={name} onChange={(e) => setName(e.target.value)} required fullWidth />
-
-              <TextField
-                label="CPF"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                required
-                fullWidth
-                helperText="Apenas números"
-              />
-              <TextField label="E-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth />
-              
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
-                    label="Senha"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    label="CNPJ da arena"
+                    value={cpfCnpj}
+                    onChange={(e) => setCpfCnpj(e.target.value)}
                     required
                     fullWidth
-                    helperText="Mínimo 6 caracteres"
+                    helperText="Apenas números"
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
-                    label="Confirmar senha"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
+                    label="E-mail da arena"
+                    type="email"
+                    value={arenaEmail}
+                    onChange={(e) => setArenaEmail(e.target.value)}
                     fullWidth
+                    helperText="Opcional (usa o seu e-mail se vazio)"
                   />
                 </Grid>
               </Grid>
@@ -258,6 +243,61 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
                 </Grid>
               </Grid>
               <TextField label="CEP" value={zipCode} onChange={(e) => setZipCode(e.target.value)} fullWidth helperText="Apenas números" />
+
+
+              <Divider textAlign="left">
+                <Typography variant="caption" color="text.secondary">Sua conta de acesso ao painel</Typography>
+              </Divider>
+
+              <TextField label="Seu nome" value={name} onChange={(e) => setName(e.target.value)} required fullWidth />
+              
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="CPF"
+                    value={cpf}
+                    onChange={(e) => setCpf(e.target.value)}
+                    required
+                    fullWidth
+                    helperText="Apenas números"
+                  />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="Seu e-mail (Login)"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      label="Senha"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      fullWidth
+                      helperText="Mínimo 6 caracteres"
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      label="Confirmar senha"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
 
               <Divider />
 
