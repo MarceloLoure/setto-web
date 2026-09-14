@@ -1,5 +1,7 @@
 import type { LandingPageData, CheckoutArenaPayload, CheckoutArenaResult } from './types';
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+
 async function parseOrThrow<T>(response: Response): Promise<T> {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
@@ -11,7 +13,10 @@ async function parseOrThrow<T>(response: Response): Promise<T> {
 
 export const publicApi = {
   async getLandingPageData(): Promise<LandingPageData> {
-    const response = await fetch('/api/public/landing-page', { cache: 'no-store' });
+    const response = await fetch(`${BACKEND_URL}/public/landing-page`, {
+      next: { revalidate: 3600 },
+    });
+    
     return parseOrThrow(response);
   },
 

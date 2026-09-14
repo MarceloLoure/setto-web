@@ -1,5 +1,6 @@
 {
-  "/api/public/landing-page/route": "app/api/public/landing-page/route.js",
   "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/politica-de-privacidade/page": "app/politica-de-privacidade/page.js",
+  "/_not-found/page": "app/_not-found/page.js"
 }
