@@ -7,6 +7,7 @@ import type {
   ArenaDashboardSummary,
   DashboardPeriod,
 } from './types';
+import { RegisterArenaFormData } from './schemas/registerArenaSchema';
 
 interface PaginatedArenas {
   data: ArenaListItem[];
@@ -38,13 +39,22 @@ export const arenasApi = {
   },
 
   /** Cadastro de nova arena — promove o usuário logado a ARENA_ADMIN */
-  async becomeAdmin(payload: CreateArenaPayload): Promise<ArenaDetail> {
+  async becomeArenaAdmin(data: RegisterArenaFormData) {
     const response = await fetch('/api/arenas/become-admin', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
-    return parseOrThrow(response);
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || result.error || 'Erro ao realizar o cadastro da arena.');
+    }
+
+    return result;
   },
 
   /** payload deve ser um FormData — campos de texto + logo/cover/photos (arquivos) */

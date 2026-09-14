@@ -209,9 +209,6 @@
   .hidden {
     display: none;
   }
-  .inline-block {
-    display: inline-block;
-  }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;

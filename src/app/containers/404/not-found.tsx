@@ -18,19 +18,6 @@ export default function NotFound() {
         py: 4,
       }}
     >
-      {/* Logo da Marca */}
-      <Box sx={{ mb: 4 }}>
-        <Link href="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
-          <Image
-            src="/header.webp"
-            alt="Setto Arenas"
-            width={120}
-            height={60}
-            priority
-            style={{ objectFit: 'contain' }}
-          />
-        </Link>
-      </Box>
 
       {/* Ícone de Bola/Raquete com Estilo Temático */}
       <Box

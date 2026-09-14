@@ -146,6 +146,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/(dashboard)/cadastro-arena/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/cadastro-arena">> = Specific
+  const handler = {} as typeof import("../../../src/app/(dashboard)/cadastro-arena/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/(dashboard)/dashboard/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/dashboard">> = Specific

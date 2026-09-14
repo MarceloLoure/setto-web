@@ -135,16 +135,12 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
       const data = await publicApi.checkoutArena({
         platformPlanId: plan.id,
         arenaName,
-        arenaEmail: arenaEmail,
         name,
         email,
         password,
         cpf: onlyDigits(cpf),
         cpfCnpj: onlyDigits(cpfCnpj),
         phone: onlyDigits(phone) || undefined,
-        city: city || undefined,
-        state: state || undefined,
-        zipCode: onlyDigits(zipCode) || undefined,
         billingType,
         ...(billingType === 'CREDIT_CARD'
           ? {

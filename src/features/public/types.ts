@@ -38,14 +38,10 @@ export interface CheckoutArenaPayload {
   arenaName: string;
   name: string;
   email: string;
-  arenaEmail: string;
   password: string;
   cpf: string;
   cpfCnpj: string;
   phone?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
   billingType: 'PIX' | 'CREDIT_CARD';
   cardId?: string;
   creditCardToken?: string;
