@@ -36,13 +36,13 @@ export default function BecomeAdminPage() {
     setError(null);
     setIsSubmitting(true);
     try {
-      const arena = await arenasApi.becomeAdmin(form);
-      // O papel do usuário mudou no backend (ATHLETE -> ARENA_ADMIN) — sincroniza
-      // o contexto local antes de navegar, senão o menu/sidebar continuam
-      // mostrando as opções antigas até o próximo refresh manual da página.
-      await refreshUser();
-      setActiveArenaId(arena.id);
-      router.push(`/arenas/${arena.id}/courts?onboarding=1`);
+      // const arena = await arenasApi.becomeAdmin(form);
+      // // O papel do usuário mudou no backend (ATHLETE -> ARENA_ADMIN) — sincroniza
+      // // o contexto local antes de navegar, senão o menu/sidebar continuam
+      // // mostrando as opções antigas até o próximo refresh manual da página.
+      // await refreshUser();
+      // setActiveArenaId(arena.id);
+      // router.push(`/arenas/${arena.id}/courts?onboarding=1`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao cadastrar arena.');
     } finally {
