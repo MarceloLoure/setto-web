@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '@pigment-css/react/styles.css';
 import './globals.css';
 import { Providers } from './providers';
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: 'Setto Arenas',
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR">
       <body>
+        <Analytics />
         <Providers>{children}</Providers>
       </body>
     </html>
