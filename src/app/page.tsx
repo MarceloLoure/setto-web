@@ -116,7 +116,7 @@ export default function RootPage() {
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ py: 2.5 }}>
           <Link href="/" style={{ textDecoration: 'none', display: 'flex' }}>
             <Image
-              src="/header.png"
+              src="/header.webp"
               alt="Setto Arenas"
               width={100}
               height={50}
@@ -150,7 +150,7 @@ export default function RootPage() {
         }}
       >
         <Image
-          src="/banner_principal.png"
+          src="/banner_principal.webp"
           alt="Banner Setto Arenas"
           width={1200}
           height={450}
@@ -387,10 +387,11 @@ export default function RootPage() {
         <Grid container spacing={4} justifyContent="space-between">
           <Grid size={{ xs: 12, sm: 5 }} textAlign={'center'} justifyItems={'center'}>
             <Image
-              src="/header.png"
+              src="/header.webp"
               alt="Setto Arenas"
               width={100}
-              height={40}
+              height={50}
+              priority
               style={{ objectFit: 'contain', marginBottom: 12 }}
             />
             <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 320, mb: 2 }}>

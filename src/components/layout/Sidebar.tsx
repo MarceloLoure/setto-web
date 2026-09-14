@@ -26,7 +26,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
         <Link href="/" style={{ display: 'flex' }}>
           <Image
-            src="/header.png"
+            src="/header.webp"
             alt="Setto Arenas Logo"
             width={100}
             height={25}
