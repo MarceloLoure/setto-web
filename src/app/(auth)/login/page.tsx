@@ -37,7 +37,7 @@ export default function LoginPage() {
           Entrar
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Acesse sua conta do Beach Social Club.
+          Acesse sua conta no Setto Arenas.
         </Typography>
 
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}

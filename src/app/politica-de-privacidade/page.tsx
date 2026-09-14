@@ -2,14 +2,11 @@ import React from 'react';
 import { Box, Container, Typography, Stack, Divider, Link as MuiLink } from '@mui/material';
 import type { Metadata } from 'next';
 
-// ⚠️ Preencha estes dados antes de publicar — são exigidos pela Google Play
-// e pela App Store (razão social/CPF-CNPJ do controlador e e-mail de contato
-// de privacidade precisam ser reais e válidos, não podem ficar como placeholder).
-const CONTROLLER_NAME = '[Nome completo / Razão social]';
-const CONTROLLER_DOCUMENT = '[CPF ou CNPJ]';
-const CONTROLLER_ADDRESS = '[Cidade/UF — ou endereço completo]';
-const PRIVACY_EMAIL = '[seu-email@dominio.com]';
-const LAST_UPDATED = '10 de setembro de 2026';
+const CONTROLLER_NAME = 'Felipe de Souza Fuzzo';
+const CONTROLLER_DOCUMENT = 'CPF: 152.102.989-06';
+const CONTROLLER_ADDRESS = 'Siqueira Campos — PR';
+const PRIVACY_EMAIL = 'settoarenas.suporte@gmail.com';
+const LAST_UPDATED = '14 de setembro de 2026';
 
 export const metadata: Metadata = {
   title: 'Política de Privacidade — Setto',
@@ -60,234 +57,190 @@ export default function PrivacyPolicyPage() {
         </Typography>
 
         <P>
-          Esta Política de Privacidade descreve como o aplicativo Setto coleta, usa, armazena,
-          compartilha e protege os dados pessoais dos usuários (&ldquo;você&rdquo;), em conformidade
-          com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD) e com as regras da Google
-          Play.
+          Esta Política de Privacidade descreve como o aplicativo Setto coleta, utiliza, armazena,
+          protege e, quando necessário, compartilha dados pessoais de seus usuários, em conformidade
+          com a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD) e com as regras
+          aplicáveis da Google Play.
         </P>
-        <P>Ao criar uma conta ou utilizar o Setto, você declara ter lido e compreendido esta Política.</P>
+        <P>Ao criar uma conta ou utilizar o Setto, você declara que leu e compreendeu esta Política de Privacidade.</P>
 
         <Divider sx={{ my: 3 }} />
 
         <SectionTitle>1. Quem somos</SectionTitle>
         <P>
-          O Setto é um aplicativo mobile para descoberta de arenas esportivas, acompanhamento de
-          arenas, agendamento de quadras e pagamento de reservas.
+          O Setto é um aplicativo mobile destinado à descoberta de arenas esportivas, acompanhamento de
+          arenas, consulta de disponibilidade, agendamento de quadras e realização de pagamentos relacionados
+          às reservas.
         </P>
-        <P>Controlador dos dados:</P>
+        <P>Controlador dos dados pessoais:</P>
         <Ul>
-          <Li>{CONTROLLER_NAME}</Li>
+          <Li>Nome: {CONTROLLER_NAME}</Li>
           <Li>{CONTROLLER_DOCUMENT}</Li>
-          <Li>E-mail de contato sobre privacidade: {PRIVACY_EMAIL}</Li>
+          <Li>E-mail de contato sobre privacidade: <MuiLink href={`mailto:${PRIVACY_EMAIL}`}>{PRIVACY_EMAIL}</MuiLink></Li>
           <Li>Endereço: {CONTROLLER_ADDRESS}</Li>
         </Ul>
 
         <SectionTitle>2. Dados que coletamos</SectionTitle>
+        <P>Os dados coletados podem variar de acordo com a utilização dos recursos disponíveis no aplicativo.</P>
 
         <Typography variant="subtitle1" fontWeight={700} sx={{ mt: 2, mb: 1 }}>
           2.1 Dados de cadastro e perfil
         </Typography>
+        <P>Podemos coletar:</P>
         <Ul>
           <Li>Nome completo</Li>
           <Li>E-mail</Li>
-          <Li>
-            Senha (armazenada de forma criptografada/hash pelo nosso servidor; não temos acesso à
-            senha em texto puro)
-          </Li>
+          <Li>Senha de acesso</Li>
           <Li>Telefone (quando informado)</Li>
-          <Li>CPF (necessário para agendar e para processamento de pagamentos)</Li>
+          <Li>CPF (quando necessário para determinadas funcionalidades e pagamentos)</Li>
           <Li>Gênero e data de nascimento (quando informados)</Li>
           <Li>Cidade e estado</Li>
-          <Li>Biografia / informações de perfil (quando informadas)</Li>
+          <Li>Biografia ou outras informações de perfil (quando informadas)</Li>
           <Li>Foto de perfil e imagem de capa (quando enviadas)</Li>
         </Ul>
+        <P>
+          A senha não é armazenada em texto puro. Ela é protegida utilizando mecanismos de segurança apropriados,
+          de forma que não tenhamos acesso à senha original do usuário.
+        </P>
+        <P>
+          A autenticação da conta pode utilizar serviços do Firebase Authentication, da Google, para criação,
+          autenticação e gerenciamento seguro das credenciais de acesso.
+        </P>
 
         <Typography variant="subtitle1" fontWeight={700} sx={{ mt: 2, mb: 1 }}>
-          2.2 Dados de uso do Aplicativo
+          2.2 Dados relacionados ao uso do aplicativo
         </Typography>
+        <P>Durante a utilização do Setto, podemos armazenar informações necessárias ao funcionamento do serviço, incluindo:</P>
         <Ul>
-          <Li>Arenas seguidas</Li>
-          <Li>Reservas e horários agendados</Li>
-          <Li>Histórico de pagamentos relacionados às reservas</Li>
-          <Li>
-            Interações necessárias ao funcionamento do app (ex.: listagem de arenas, disponibilidade
-            de quadras)
-          </Li>
+          <Li>Arenas seguidas pelo usuário</Li>
+          <Li>Arenas visualizadas ou selecionadas</Li>
+          <Li>Reservas realizadas, com datas, horários e quadras associadas</Li>
+          <Li>Status das reservas e informações de pagamentos</Li>
+          <Li>Identificadores e informações técnicas necessárias para segurança, autenticação e funcionamento do aplicativo</Li>
         </Ul>
 
         <Typography variant="subtitle1" fontWeight={700} sx={{ mt: 2, mb: 1 }}>
           2.3 Dados de localização
         </Typography>
         <P>
-          Com a sua permissão, podemos acessar a localização aproximada ou precisa do dispositivo
-          para:
+          O Setto pode solicitar acesso à localização do dispositivo somente enquanto o aplicativo estiver aberto e sendo utilizado.
+          A localização é utilizada exclusivamente para:
         </P>
         <Ul>
-          <Li>sugerir arenas e conteúdo relevantes à sua cidade;</Li>
-          <Li>personalizar a experiência na tela inicial.</Li>
+          <Li>encontrar e apresentar arenas esportivas próximas ao usuário;</Li>
+          <Li>melhorar a experiência de descoberta de arenas.</Li>
         </Ul>
         <P>
-          Você pode negar ou revogar essa permissão nas configurações do aparelho. Sem localização, o
-          app continua funcionando, podendo usar a cidade informada no perfil ou conteúdo genérico.
+          <strong>O Setto não coleta localização em segundo plano.</strong> O usuário pode negar ou revogar a permissão nas
+          configurações do próprio dispositivo. Caso negada, o app continuará funcionando com recursos de proximidade limitados.
         </P>
 
         <Typography variant="subtitle1" fontWeight={700} sx={{ mt: 2, mb: 1 }}>
-          2.4 Câmera e fotos
+          2.4 Câmera e galeria de fotos
         </Typography>
         <P>
-          Com a sua permissão, podemos acessar a câmera ou a galeria apenas para que você envie foto
-          de perfil/capa. Não usamos a câmera em segundo plano.
+          O Setto poderá solicitar acesso à câmera ou galeria de fotos somente quando o usuário optar por adicionar foto de perfil,
+          imagem de capa ou realizar ações ativas de upload no app. Não utilizamos a câmera em segundo plano.
         </P>
 
         <Typography variant="subtitle1" fontWeight={700} sx={{ mt: 2, mb: 1 }}>
           2.5 Dados de pagamento
         </Typography>
-        <P>Para reservas pagas (Pix ou cartão), podemos processar:</P>
-        <Ul>
-          <Li>valor, status e identificadores da cobrança/reserva;</Li>
-          <Li>
-            dados necessários ao pagamento (ex.: dados do cartão tokenizados, CEP e número do
-            endereço do titular, quando aplicável).
-          </Li>
-        </Ul>
         <P>
-          <strong>Importante:</strong> dados sensíveis de cartão (número completo e CVV) são tratados
-          por meio de provedores de pagamento (tokenização). Não armazenamos o número completo do
-          cartão nem o CVV nos nossos servidores de forma legível para uso indevido.
+          Para permitir o pagamento de reservas (Pix e cartão), o Setto utiliza serviços de processamento fornecidos pelo Asaas.
+          Podem ser tratados dados como: valor, identificador e status da cobrança, informações da reserva, dados necessários à autorização,
+          token de pagamento e informações básicas do cartão disponibilizadas pelo provedor.
+        </P>
+        <P>
+          Quando o usuário opta por salvar um cartão para pagamentos futuros, o Setto armazena apenas um token fornecido pelo Asaas
+          e dados limitados de identificação (como os últimos 4 dígitos e validade). O token não corresponde ao número completo do cartão.
         </P>
 
-        <Typography variant="subtitle1" fontWeight={700} sx={{ mt: 2, mb: 1 }}>
-          2.6 Dados técnicos
-        </Typography>
+        <SectionTitle>3. Para que utilizamos seus dados</SectionTitle>
+        <P>Tratamos seus dados pessoais para:</P>
         <Ul>
-          <Li>Identificadores de sessão/token de autenticação</Li>
-          <Li>
-            Informações básicas do dispositivo e logs técnicos necessários à segurança, diagnóstico e
-            funcionamento do serviço
-          </Li>
-          <Li>Comunicação com nossos servidores via internet</Li>
+          <Li>criar e gerenciar sua conta e autenticar o usuário;</Li>
+          <Li>permitir edição de perfil e envio de fotos/imagens;</Li>
+          <Li>apresentar arenas esportivas, quadras e disponibilidades;</Li>
+          <Li>processar agendamentos, reservas e pagamentos;</Li>
+          <Li>permitir pagamentos futuros utilizando cartão previamente tokenizado, quando solicitado pelo usuário;</Li>
+          <Li>enviar informações operacionais sobre reservas, pagamentos e recuperação de acesso;</Li>
+          <Li>manter a segurança, prevenir fraudes, abusos e atividades ilícitas;</Li>
+          <Li>identificar e solucionar erros técnicos e cumprir obrigações legais e regulatórias.</Li>
         </Ul>
 
-        <SectionTitle>3. Para que usamos seus dados</SectionTitle>
-        <P>Tratamos seus dados para:</P>
+        <SectionTitle>4. Bases legais para o tratamento</SectionTitle>
+        <P>O tratamento dos dados pessoais fundamenta-se na LGPD através das bases de:</P>
         <Ul>
-          <Li>criar e autenticar sua conta;</Li>
-          <Li>permitir edição de perfil e upload de fotos;</Li>
-          <Li>localizar e exibir arenas, horários e disponibilidades;</Li>
-          <Li>processar agendamentos e pagamentos;</Li>
-          <Li>salvar cartões tokenizados a seu pedido, para facilitar pagamentos futuros;</Li>
-          <Li>enviar informações operacionais (ex.: status de reserva/pagamento, recuperação de senha);</Li>
-          <Li>cumprir obrigações legais e regulatórias;</Li>
-          <Li>prevenir fraudes, abusos e falhas de segurança;</Li>
-          <Li>melhorar a experiência e o desempenho do Aplicativo.</Li>
-        </Ul>
-
-        <SectionTitle>4. Bases legais (LGPD)</SectionTitle>
-        <P>Dependendo do caso, o tratamento pode se basear em:</P>
-        <Ul>
-          <Li>execução de contrato (prestação do serviço de conta, agendamento e pagamento);</Li>
-          <Li>consentimento (ex.: localização, câmera/galeria, quando exigido);</Li>
-          <Li>cumprimento de obrigação legal/regulatória;</Li>
-          <Li>
-            legítimo interesse (segurança, prevenção a fraudes e melhorias do serviço), observado o
-            seu direito e a LGPD.
-          </Li>
+          <Li><strong>Execução de contrato:</strong> para prestação dos serviços (conta, reservas, agendamentos e pagamentos);</Li>
+          <Li><strong>Consentimento:</strong> para funcionalidades que dependam de autorização prévia (localização em uso, câmera e galeria);</Li>
+          <Li><strong>Cumprimento de obrigação legal ou regulatória:</strong> conforme exigido por legislação ou ordens de autoridades;</Li>
+          <Li><strong>Legítimo interesse:</strong> para segurança da plataforma, prevenção contra fraudes, diagnósticos e melhorias do serviço.</Li>
         </Ul>
 
         <SectionTitle>5. Compartilhamento de dados</SectionTitle>
-        <P>Podemos compartilhar dados com:</P>
+        <P>O Setto não vende dados pessoais. O compartilhamento ocorre apenas quando estritamente necessário:</P>
         <Ul>
           <Li>
-            <strong>Arenas / estabelecimentos</strong> — informações necessárias para confirmar e
-            gerir a reserva (ex.: nome, horário, quadra, status do pagamento).
+            <strong>Arenas esportivas:</strong> ao realizar uma reserva, a arena recebe o nome do cliente e dados do horário/quadra para atendimento. A arena não possui acesso ao cadastro completo, CPF, senha ou dados de cartão.
           </Li>
           <Li>
-            <strong>Provedores de pagamento</strong> — para processar Pix/cartão e antifraude (ex.:
-            gateways como Asaas ou equivalentes utilizados pela operação).
+            <strong>Provedores de pagamento:</strong> dados necessários ao processamento, tokenização, autorização e prevenção a fraudes são tratados junto ao gateway Asaas.
           </Li>
           <Li>
-            <strong>Infraestrutura de nuvem e hospedagem</strong> — para armazenamento e operação do
-            backend.
+            <strong>Serviços de infraestrutura e autenticação:</strong> utilizaremos provedores como o Firebase Authentication para gestão segura de credenciais.
           </Li>
           <Li>
-            <strong>Serviços de autenticação/notificação</strong> e ferramentas técnicas necessárias
-            ao funcionamento do app (quando aplicável).
-          </Li>
-          <Li>
-            <strong>Autoridades públicas</strong> — quando houver obrigação legal ou ordem válida.
+            <strong>Autoridades públicas:</strong> quando houver obrigação legal, ordem judicial ou determinação válida.
           </Li>
         </Ul>
-        <P>Não vendemos seus dados pessoais.</P>
 
         <SectionTitle>6. Armazenamento e segurança</SectionTitle>
         <P>
-          Seus dados são armazenados em servidores sob nosso controle ou de fornecedores contratados,
-          com medidas técnicas e administrativas razoáveis de proteção (controle de acesso,
-          criptografia em trânsito via HTTPS, tokens de sessão, etc.).
-        </P>
-        <P>
-          Nenhum sistema é 100% seguro. Em caso de incidente relevante, adotaremos as medidas
-          cabíveis, inclusive comunicação quando exigido pela LGPD.
+          Adotamos medidas técnicas e administrativas razoáveis para proteger seus dados contra acessos não autorizados, perdas ou alterações,
+          incluindo comunicação segura via HTTPS, controle de acesso e tokens de autenticação.
         </P>
 
-        <SectionTitle>7. Retenção dos dados</SectionTitle>
-        <P>Mantemos os dados apenas pelo tempo necessário para:</P>
-        <Ul>
-          <Li>prestar o serviço;</Li>
-          <Li>cumprir obrigações legais, fiscais e contábeis;</Li>
-          <Li>resolver disputas e prevenir fraudes.</Li>
-        </Ul>
+        <SectionTitle>7. Retenção e exclusão da conta</SectionTitle>
         <P>
-          Você pode solicitar exclusão da conta e dos dados, observados prazos legais de retenção
-          (ex.: registros de pagamento).
+          Os dados são mantidos pelo período necessário para prestação do serviço, histórico de reservas, comprovantes fiscais e obrigações legais.
+        </P>
+        <P>
+          <strong>Exclusão da conta:</strong> o usuário pode solicitar a exclusão de sua conta diretamente pelo aplicativo Setto. Dados associados serão
+          excluídos ou anonimizados, respeitados os prazos e obrigações legais de retenção (ex.: registros fiscais de pagamentos).
         </P>
 
-        <SectionTitle>8. Seus direitos (LGPD)</SectionTitle>
-        <P>Você pode solicitar:</P>
-        <Ul>
-          <Li>confirmação da existência de tratamento;</Li>
-          <Li>acesso aos dados;</Li>
-          <Li>correção de dados incompletos, inexatos ou desatualizados;</Li>
-          <Li>anonimização, bloqueio ou eliminação de dados desnecessários;</Li>
-          <Li>portabilidade, quando aplicável;</Li>
-          <Li>informação sobre compartilhamentos;</Li>
-          <Li>revogação do consentimento;</Li>
-          <Li>eliminação dos dados tratados com base no consentimento, na forma da lei.</Li>
-        </Ul>
+        <SectionTitle>8. Direitos do usuário (LGPD)</SectionTitle>
+        <P>Você pode solicitar confirmação da existência de tratamento, acesso, correção, anonimização, exclusão, portabilidade ou revogação de consentimento.</P>
         <P>
-          Para exercer seus direitos, envie e-mail para{' '}
-          <MuiLink href={`mailto:${PRIVACY_EMAIL}`}>{PRIVACY_EMAIL}</MuiLink> com o assunto
-          &ldquo;LGPD — Setto&rdquo;.
+          Para exercer seus direitos, entre em contato via e-mail{' '}
+          <MuiLink href={`mailto:${PRIVACY_EMAIL}`}>{PRIVACY_EMAIL}</MuiLink> com o assunto &ldquo;LGPD — Setto&rdquo;.
+          Você também tem o direito de apresentar reclamação perante a Autoridade Nacional de Proteção de Dados (ANPD).
         </P>
-        <P>Também é possível apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</P>
 
         <SectionTitle>9. Conta de menores</SectionTitle>
         <P>
-          O Setto não é destinado a crianças menores de 13 anos. Se você tiver menos de 18 anos,
-          utilize o app apenas com supervisão/autorização do responsável legal, quando aplicável.
+          O Setto não é destinado a crianças menores de 13 anos. Menores de idade devem utilizar o app sob autorização e supervisão de seus responsáveis legais.
         </P>
 
-        <SectionTitle>10. Links e serviços de terceiros</SectionTitle>
+        <SectionTitle>10. Serviços de terceiros e links</SectionTitle>
         <P>
-          O Aplicativo pode abrir mapas, links externos ou serviços de pagamento de terceiros. Esta
-          Política não cobre o tratamento feito por esses terceiros. Recomendamos ler as políticas
-          deles.
+          O app utiliza serviços de terceiros como <strong>Firebase Authentication</strong> (autenticação) e <strong>Asaas</strong> (pagamentos), além de links
+          para mapas ou páginas externas. Esta política não cobre o tratamento realizado diretamente em ambientes de terceiros.
         </P>
 
         <SectionTitle>11. Alterações nesta Política</SectionTitle>
         <P>
-          Podemos atualizar esta Política periodicamente. A data de &ldquo;Última atualização&rdquo;
-          será revisada. Em mudanças relevantes, poderemos avisar pelo app ou por e-mail, quando
-          adequado.
+          Podemos atualizar esta Política periodicamente. Mudanças relevantes serão notificadas via aplicativo ou e-mail.
         </P>
 
         <SectionTitle>12. Contato</SectionTitle>
-        <P>Dúvidas sobre privacidade ou dados pessoais:</P>
+        <P>Para dúvidas ou solicitações relacionadas a esta Política:</P>
         <Ul>
-          <Li>
-            E-mail: <MuiLink href={`mailto:${PRIVACY_EMAIL}`}>{PRIVACY_EMAIL}</MuiLink>
-          </Li>
-          <Li>App: Setto</Li>
+          <Li>Responsável: {CONTROLLER_NAME}</Li>
+          <Li>Cidade/UF: {CONTROLLER_ADDRESS}</Li>
+          <Li>E-mail: <MuiLink href={`mailto:${PRIVACY_EMAIL}`}>{PRIVACY_EMAIL}</MuiLink></Li>
+          <Li>Site oficial: <MuiLink href="https://www.settoarenas.com.br/" target="_blank" rel="noopener">https://www.settoarenas.com.br/</MuiLink></Li>
         </Ul>
 
         <Divider sx={{ my: 4 }} />

@@ -40,6 +40,49 @@ function currencyBR(value: number) {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+// Helper para remover tudo que não for dígito
+const onlyDigits = (val: string) => val.replace(/\D/g, '');
+
+// Formatadores de máscara visual
+const formatCPF = (val: string) => {
+  const digits = onlyDigits(val).slice(0, 11);
+  return digits
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+};
+
+const formatCNPJ = (val: string) => {
+  const digits = onlyDigits(val).slice(0, 14);
+  return digits
+    .replace(/^(\d{2})(\d)/, '$1.$2')
+    .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+    .replace(/\.(\d{3})(\d)/, '.$1/$2')
+    .replace(/(\d{4})(\d)/, '$1-$2');
+};
+
+const formatPhone = (val: string) => {
+  const digits = onlyDigits(val).slice(0, 11);
+  if (digits.length <= 10) {
+    return digits
+      .replace(/^(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{4})(\d)/, '$1-$2');
+  }
+  return digits
+    .replace(/^(\d{2})(\d)/, '($1) $2')
+    .replace(/(\d{5})(\d)/, '$1-$2');
+};
+
+const formatZipCode = (val: string) => {
+  const digits = onlyDigits(val).slice(0, 8);
+  return digits.replace(/^(\d{5})(\d)/, '$1-$2');
+};
+
+const formatCardNumber = (val: string) => {
+  const digits = onlyDigits(val).slice(0, 16);
+  return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+};
+
 export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
   const [billingType, setBillingType] = useState<'PIX' | 'CREDIT_CARD'>('PIX');
   const [arenaName, setArenaName] = useState('');
@@ -47,7 +90,7 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [arenaEmail, setArenaEmail] = useState('')
+  const [arenaEmail, setArenaEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [cpfCnpj, setCpfCnpj] = useState('');
   const [phone, setPhone] = useState('');
@@ -96,20 +139,34 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
         name,
         email,
         password,
-        cpf,
-        cpfCnpj,
-        phone: phone || undefined,
+        cpf: onlyDigits(cpf),
+        cpfCnpj: onlyDigits(cpfCnpj),
+        phone: onlyDigits(phone) || undefined,
         city: city || undefined,
         state: state || undefined,
-        zipCode: zipCode || undefined,
+        zipCode: onlyDigits(zipCode) || undefined,
         billingType,
         ...(billingType === 'CREDIT_CARD'
           ? {
-              creditCard: { holderName, number: cardNumber, expiryMonth, expiryYear, ccv },
-              creditCardHolderInfo: { name: holderName, postalCode: zipCode || undefined },
+              creditCard: {
+                holderName,
+                number: onlyDigits(cardNumber),
+                expiryMonth: onlyDigits(expiryMonth),
+                expiryYear: onlyDigits(expiryYear),
+                ccv: onlyDigits(ccv),
+              },
+              creditCardHolderInfo: {
+                name: holderName,
+                postalCode: onlyDigits(zipCode),
+              },
             }
           : {}),
       });
+
+      if (data.accessToken) {
+        localStorage.setItem('token', data.accessToken);
+      }
+
       setResult(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Não foi possível processar a contratação.');
@@ -129,7 +186,7 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
     <Dialog open={!!plan} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         {result ? 'Falta pouco' : `Assinar o plano ${plan.name}`}
-        <IconButton onClick={handleClose} size="small">
+        <IconButton onClick={handleClose} size="small" disabled={isSubmitting}>
           <CloseIcon fontSize="small" />
         </IconButton>
       </DialogTitle>
@@ -149,7 +206,7 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
                   component="img"
                   src={`data:image/png;base64,${result.pix.encodedImage}`}
                   alt="QR Code Pix"
-                  sx={{ width: 220, height: 220, borderRadius: 2, bgcolor: '#fff', p: 1 }}
+                  sx={{ width: 220, height: 220, borderRadius: 2, bgcolor: '#fff', p: 1, border: '1px solid #eee' }}
                 />
                 <Button
                   variant="outlined"
@@ -182,11 +239,12 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
           <Box component="form" id="checkout-form" onSubmit={handleSubmit} sx={{ pt: 1 }}>
             <Stack spacing={2}>
               <Typography variant="body2" color="text.secondary">
-                {plan.description} — {currencyBR(plan.price)}/{BILLING_CYCLE_LABEL[plan.billingCycle]}
+                {plan.description} — <strong>{currencyBR(plan.price)}/{BILLING_CYCLE_LABEL[plan.billingCycle]}</strong>
               </Typography>
 
               {error && <Alert severity="error">{error}</Alert>}
 
+              {/* DADOS DA ARENA */}
               <Divider textAlign="left">
                 <Typography variant="caption" color="text.secondary">Dados da Arena</Typography>
               </Divider>
@@ -199,41 +257,22 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
                 fullWidth
               />
 
-              <Grid container spacing={2}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    label="CNPJ da arena"
-                    value={cpfCnpj}
-                    onChange={(e) => setCpfCnpj(e.target.value)}
-                    required
-                    fullWidth
-                    helperText="Apenas números"
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    label="E-mail da arena"
-                    type="email"
-                    value={arenaEmail}
-                    onChange={(e) => setArenaEmail(e.target.value)}
-                    fullWidth
-                    helperText="Opcional (usa o seu e-mail se vazio)"
-                  />
-                </Grid>
-              </Grid>
-
               <TextField
                 label="CNPJ da arena"
                 value={cpfCnpj}
-                onChange={(e) => setCpfCnpj(e.target.value)}
+                onChange={(e) => setCpfCnpj(formatCNPJ(e.target.value))}
                 required
                 fullWidth
-                helperText="Apenas números"
               />
 
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField label="Telefone" value={phone} onChange={(e) => setPhone(e.target.value)} fullWidth />
+                  <TextField
+                    label="Telefone / WhatsApp"
+                    value={phone}
+                    onChange={(e) => setPhone(formatPhone(e.target.value))}
+                    fullWidth
+                  />
                 </Grid>
                 <Grid size={{ xs: 8, sm: 4 }}>
                   <TextField label="Cidade" value={city} onChange={(e) => setCity(e.target.value)} fullWidth />
@@ -242,27 +281,31 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
                   <TextField label="UF" value={state} onChange={(e) => setState(e.target.value.toUpperCase())} fullWidth inputProps={{ maxLength: 2 }} />
                 </Grid>
               </Grid>
-              <TextField label="CEP" value={zipCode} onChange={(e) => setZipCode(e.target.value)} fullWidth helperText="Apenas números" />
 
+              <TextField
+                label="CEP"
+                value={zipCode}
+                onChange={(e) => setZipCode(formatZipCode(e.target.value))}
+                fullWidth
+              />
 
+              {/* DADOS DO GESTOR / CONTA */}
               <Divider textAlign="left">
                 <Typography variant="caption" color="text.secondary">Sua conta de acesso ao painel</Typography>
               </Divider>
 
               <TextField label="Seu nome" value={name} onChange={(e) => setName(e.target.value)} required fullWidth />
-              
+
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
-                    label="CPF"
+                    label="CPF do responsável"
                     value={cpf}
-                    onChange={(e) => setCpf(e.target.value)}
+                    onChange={(e) => setCpf(formatCPF(e.target.value))}
                     required
                     fullWidth
-                    helperText="Apenas números"
                   />
                 </Grid>
-
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Seu e-mail (Login)"
@@ -276,30 +319,33 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
               </Grid>
 
               <Grid container spacing={2}>
-                  <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      label="Senha"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      fullWidth
-                      helperText="Mínimo 6 caracteres"
-                    />
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      label="Confirmar senha"
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                      fullWidth
-                    />
-                  </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="Senha"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    fullWidth
+                    helperText="Mínimo 6 caracteres"
+                  />
                 </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="Confirmar senha"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
 
-              <Divider />
+              {/* PAGAMENTO */}
+              <Divider textAlign="left">
+                <Typography variant="caption" color="text.secondary">Forma de pagamento</Typography>
+              </Divider>
 
               <ToggleButtonGroup
                 value={billingType}
@@ -313,18 +359,44 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
               </ToggleButtonGroup>
 
               {billingType === 'CREDIT_CARD' && (
-                <Stack spacing={2}>
-                  <TextField label="Nome no cartão" value={holderName} onChange={(e) => setHolderName(e.target.value)} required fullWidth />
-                  <TextField label="Número do cartão" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} required fullWidth />
+                <Stack spacing={2} sx={{ pt: 1 }}>
+                  <TextField label="Nome impresso no cartão" value={holderName} onChange={(e) => setHolderName(e.target.value)} required fullWidth />
+                  <TextField
+                    label="Número do cartão"
+                    value={cardNumber}
+                    onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+                    required
+                    fullWidth
+                  />
                   <Grid container spacing={2}>
-                    <Grid size={4}>
-                      <TextField label="Mês" placeholder="MM" value={expiryMonth} onChange={(e) => setExpiryMonth(e.target.value)} required fullWidth />
+                    <Grid size={{ xs: 4 }}>
+                      <TextField
+                        label="Mês"
+                        placeholder="MM"
+                        value={expiryMonth}
+                        onChange={(e) => setExpiryMonth(onlyDigits(e.target.value).slice(0, 2))}
+                        required
+                        fullWidth
+                      />
                     </Grid>
-                    <Grid size={4}>
-                      <TextField label="Ano" placeholder="AAAA" value={expiryYear} onChange={(e) => setExpiryYear(e.target.value)} required fullWidth />
+                    <Grid size={{ xs: 4 }}>
+                      <TextField
+                        label="Ano"
+                        placeholder="AAAA"
+                        value={expiryYear}
+                        onChange={(e) => setExpiryYear(onlyDigits(e.target.value).slice(0, 4))}
+                        required
+                        fullWidth
+                      />
                     </Grid>
-                    <Grid size={4}>
-                      <TextField label="CVV" value={ccv} onChange={(e) => setCcv(e.target.value)} required fullWidth />
+                    <Grid size={{ xs: 4 }}>
+                      <TextField
+                        label="CVV"
+                        value={ccv}
+                        onChange={(e) => setCcv(onlyDigits(e.target.value).slice(0, 4))}
+                        required
+                        fullWidth
+                      />
                     </Grid>
                   </Grid>
                 </Stack>

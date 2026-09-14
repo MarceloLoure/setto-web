@@ -54,7 +54,12 @@ const BILLING_CYCLE_LABEL: Record<string, string> = {
 };
 
 function currencyBR(value: number) {
-  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 function CourtLine() {
@@ -136,11 +141,12 @@ export default function RootPage() {
           width: '100%',
           maxWidth: '1200px',
           maxHeight: 450,
-          height: { xs: 250, md: 450 },
+          height: "auto",
           my: { xs: 2, md: 4 },
           overflow: 'hidden',
-          borderRadius: 3,
+          borderRadius: { xs: 1, md: 2 },
           mx: 'auto',
+          padding: { xs: '0px 5px', md: 0 },
         }}
       >
         <Image
@@ -148,6 +154,7 @@ export default function RootPage() {
           alt="Banner Setto Arenas"
           width={1200}
           height={450}
+          sizes="100vw"
           priority
           style={{ objectFit: 'cover', objectPosition: 'center' }}
         />
@@ -156,7 +163,7 @@ export default function RootPage() {
       {/* Hero Content */}
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
         <Grid container spacing={6} alignItems="center">
-          <Grid size={{ xs: 12, md: 7 }}>
+          <Grid size={{ xs: 12, md: 7 }} sx={{ justifySelf: {xs: 'center', md: 'start'}, textAlign: {xs: 'center', md: 'start'} }}>
             <Typography
               component="h1"
               sx={{
@@ -173,7 +180,7 @@ export default function RootPage() {
               O Setto cuida da grade de horários, cobra o atleta na hora da reserva e libera o financeiro
               da sua arena de qualquer planilha.
             </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mt={{xs: 2}}>
               <Button component="a" href="#planos" variant="contained" size="large">
                 Cadastrar minha arena
               </Button>
@@ -239,13 +246,13 @@ export default function RootPage() {
         <>
           <Container maxWidth="lg"><CourtLine /></Container>
           <Container maxWidth="lg" sx={{ py: 5 }}>
-            <Grid container spacing={4}>
+            <Grid container spacing={4} justifyContent="center" alignItems="center">
               {[
                 { value: data.stats.activeArenas, label: 'arenas ativas na plataforma' },
                 { value: data.stats.activeCourts, label: 'quadras gerenciadas' },
                 { value: data.stats.totalBookings, label: 'reservas realizadas' },
               ].map((stat) => (
-                <Grid size={{ xs: 12, sm: 4 }} key={stat.label}>
+                <Grid size={{ xs: 12, sm: 4 }} key={stat.label} sx={{ textAlign: 'center' }}>
                   <Typography variant="h3" fontWeight={800} color="primary.main">
                     {stat.value.toLocaleString('pt-BR')}
                   </Typography>
@@ -262,11 +269,11 @@ export default function RootPage() {
       <Container maxWidth="lg"><CourtLine /></Container>
 
       {/* Recursos */}
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 } }} id="recursos">
-        <Typography variant="h4" fontWeight={800} sx={{ mb: 5, maxWidth: 560 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 }}} id="recursos">
+        <Typography variant="h4" fontWeight={800} sx={{ mb: 5, maxWidth: 560, justifySelf: 'center', textAlign: 'center' }}>
           Tudo que sua arena precisa pra parar de perder reserva por WhatsApp
         </Typography>
-        <Grid container spacing={4}>
+        <Grid container spacing={4} mt={2}>
           {FEATURES.map((feature) => {
             const FeatureIcon = feature.icon;
             return (
@@ -291,7 +298,7 @@ export default function RootPage() {
       <Container maxWidth="lg"><CourtLine /></Container>
 
       {/* Planos */}
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 } }} id="planos">
+      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 }, textAlign: 'center' }} id="planos">
         <Typography variant="h4" fontWeight={800} sx={{ mb: 1 }}>
           Escolha o plano da sua arena
         </Typography>
@@ -308,7 +315,7 @@ export default function RootPage() {
             Nenhum plano disponível no momento. Fale com a gente para uma proposta sob medida.
           </Typography>
         ) : (
-          <Grid container spacing={3}>
+          <Grid container spacing={3} mt={2} justifyContent="center">
             {data.plans.map((plan: any, index: number) => {
               const isHighlighted = index === Math.floor((data.plans.length - 1) / 2) && data.plans.length > 1;
               return (
@@ -319,11 +326,13 @@ export default function RootPage() {
                       height: '100%',
                       display: 'flex',
                       flexDirection: 'column',
-                      borderRadius: 3,
+                      alignItems: 'center',
+                      borderRadius: 2,
                       border: '1px solid',
                       borderColor: isHighlighted ? 'primary.main' : 'divider',
                       bgcolor: 'background.paper',
                       position: 'relative',
+                      justifyItems: 'center',
                     }}
                   >
                     {isHighlighted && (
@@ -331,7 +340,7 @@ export default function RootPage() {
                         label="Mais escolhido"
                         color="primary"
                         size="small"
-                        sx={{ position: 'absolute', top: -12, left: 24 }}
+                        sx={{ position: 'absolute', top: -12, left: 24, justifyContent: 'center', fontWeight: 700, px: 1.5, py: 0.25 }}
                       />
                     )}
                     <Typography variant="h6" fontWeight={700}>
@@ -374,15 +383,56 @@ export default function RootPage() {
 
       {/* Footer */}
       <Container maxWidth="lg"><CourtLine /></Container>
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="center" spacing={2}>
-          <Typography variant="body2" color="text.secondary">
-            © {new Date().getFullYear()} Setto. Todos os direitos reservados.
-          </Typography>
-          <Button component={Link} href="/login" color="inherit" size="small">
-            Já sou cliente — Entrar
-          </Button>
-        </Stack>
+      <Container maxWidth="lg" sx={{ py: 6 }}>
+        <Grid container spacing={4} justifyContent="space-between">
+          <Grid size={{ xs: 12, sm: 5 }} textAlign={'center'} justifyItems={'center'}>
+            <Image
+              src="/header.png"
+              alt="Setto Arenas"
+              width={100}
+              height={40}
+              style={{ objectFit: 'contain', marginBottom: 12 }}
+            />
+            <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 320, mb: 2 }}>
+              A plataforma completa para gestão, agendamento e pagamento automatizado para arenas esportivas.
+            </Typography>
+            <Typography variant="caption" color="text.secondary" display="block">
+              © {new Date().getFullYear()} Setto. Todos os direitos reservados.
+            </Typography>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 7 }}>
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 6, sm: 6 }} textAlign={'center'}>
+                <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1.5 }}>
+                  Institucional
+                </Typography>
+                <Stack spacing={1} mt={1}>
+                  <Button component={Link} href="/politica-de-privacidade" color="inherit" size="small" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                    Política de Privacidade
+                  </Button>
+                  <Button component={Link} href="/termos-de-uso" color="inherit" size="small" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                    Termos de Uso
+                  </Button>
+                </Stack>
+              </Grid>
+
+              <Grid size={{ xs: 6, sm: 6 }} textAlign={'center'}>
+                <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1.5 }}>
+                  Acesso
+                </Typography>
+                <Stack spacing={1} mt={1}>
+                  <Button component={Link} href="/login" color="inherit" size="small" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                    Área do Cliente
+                  </Button>
+                  <Button component="a" href="#planos" color="inherit" size="small" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                    Cadastrar Arena
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Container>
 
       <CheckoutDialog plan={selectedPlan} onClose={() => setSelectedPlan(null)} />

@@ -4,8 +4,8 @@ import './globals.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  title: 'Beach Social Club',
-  description: 'Plataforma B2B2C',
+  title: 'Setto Arenas',
+  description: 'Sua plataforma de esportes de arena. Gerencie reservas, pagamentos e muito mais.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
