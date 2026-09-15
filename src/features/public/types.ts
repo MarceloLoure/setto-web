@@ -35,12 +35,10 @@ export interface CreditCardHolderInfoPayload {
 
 export interface CheckoutArenaPayload {
   platformPlanId: string;
-  arenaName: string;
   name: string;
   email: string;
   password: string;
   cpf: string;
-  cpfCnpj: string;
   phone?: string;
   billingType: 'PIX' | 'CREDIT_CARD';
   cardId?: string;

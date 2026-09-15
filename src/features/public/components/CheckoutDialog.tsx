@@ -85,14 +85,11 @@ const formatCardNumber = (val: string) => {
 
 export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
   const [billingType, setBillingType] = useState<'PIX' | 'CREDIT_CARD'>('PIX');
-  const [arenaName, setArenaName] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [arenaEmail, setArenaEmail] = useState('');
   const [cpf, setCpf] = useState('');
-  const [cpfCnpj, setCpfCnpj] = useState('');
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -134,12 +131,10 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
     try {
       const data = await publicApi.checkoutArena({
         platformPlanId: plan.id,
-        arenaName,
         name,
         email,
         password,
         cpf: onlyDigits(cpf),
-        cpfCnpj: onlyDigits(cpfCnpj),
         phone: onlyDigits(phone) || undefined,
         billingType,
         ...(billingType === 'CREDIT_CARD'
@@ -240,50 +235,6 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
 
               {error && <Alert severity="error">{error}</Alert>}
 
-              {/* DADOS DA ARENA */}
-              <Divider textAlign="left">
-                <Typography variant="caption" color="text.secondary">Dados da Arena</Typography>
-              </Divider>
-
-              <TextField
-                label="Nome da arena"
-                value={arenaName}
-                onChange={(e) => setArenaName(e.target.value)}
-                required
-                fullWidth
-              />
-
-              <TextField
-                label="CNPJ da arena"
-                value={cpfCnpj}
-                onChange={(e) => setCpfCnpj(formatCNPJ(e.target.value))}
-                required
-                fullWidth
-              />
-
-              <Grid container spacing={2}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    label="Telefone / WhatsApp"
-                    value={phone}
-                    onChange={(e) => setPhone(formatPhone(e.target.value))}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid size={{ xs: 8, sm: 4 }}>
-                  <TextField label="Cidade" value={city} onChange={(e) => setCity(e.target.value)} fullWidth />
-                </Grid>
-                <Grid size={{ xs: 4, sm: 2 }}>
-                  <TextField label="UF" value={state} onChange={(e) => setState(e.target.value.toUpperCase())} fullWidth inputProps={{ maxLength: 2 }} />
-                </Grid>
-              </Grid>
-
-              <TextField
-                label="CEP"
-                value={zipCode}
-                onChange={(e) => setZipCode(formatZipCode(e.target.value))}
-                fullWidth
-              />
 
               {/* DADOS DO GESTOR / CONTA */}
               <Divider textAlign="left">
@@ -336,6 +287,13 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
                     fullWidth
                   />
                 </Grid>
+
+                <TextField
+                    label="CEP"
+                    value={zipCode}
+                    onChange={(e) => setZipCode(formatZipCode(e.target.value))}
+                    fullWidth
+                />
               </Grid>
 
               {/* PAGAMENTO */}
@@ -356,6 +314,13 @@ export default function CheckoutDialog({ plan, onClose }: CheckoutDialogProps) {
 
               {billingType === 'CREDIT_CARD' && (
                 <Stack spacing={2} sx={{ pt: 1 }}>
+                  <TextField
+                    label="Telefone / WhatsApp (com DDD)"
+                    value={phone}
+                    onChange={(e) => setPhone(formatPhone(e.target.value))}
+                    required={billingType === 'CREDIT_CARD'} // <--- Torna obrigatório para Cartão
+                    fullWidth
+                  />
                   <TextField label="Nome impresso no cartão" value={holderName} onChange={(e) => setHolderName(e.target.value)} required fullWidth />
                   <TextField
                     label="Número do cartão"

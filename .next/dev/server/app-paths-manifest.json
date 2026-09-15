@@ -1,12 +1,8 @@
 {
   "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/api/auth/login/route": "app/api/auth/login/route.js",
-  "/api/courts/arena/[arenaId]/route": "app/api/courts/arena/[arenaId]/route.js",
-  "/api/courts/[courtId]/route": "app/api/courts/[courtId]/route.js",
+  "/api/arenas/become-admin/route": "app/api/arenas/become-admin/route.js",
   "/page": "app/page.js",
   "/(auth)/login/page": "app/(auth)/login/page.js",
   "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
-  "/(dashboard)/arenas/[arenaId]/edit/page": "app/(dashboard)/arenas/[arenaId]/edit/page.js",
-  "/(dashboard)/cadastro-arena/page": "app/(dashboard)/cadastro-arena/page.js",
-  "/(dashboard)/arenas/[arenaId]/courts/page": "app/(dashboard)/arenas/[arenaId]/courts/page.js"
+  "/(dashboard)/cadastro-arena/page": "app/(dashboard)/cadastro-arena/page.js"
 }
